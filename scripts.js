@@ -4,7 +4,6 @@ let Api = "https://randomuser.me/api/?results=12&nat=us";
 fetch(Api)
   .then((response) => response.json())
   //.then(data => console.log(data))
-
   .then((data) => {
     generateprofile(data.results);
     changeModal(data.results);
@@ -23,19 +22,29 @@ function generateprofile(data) {
                 <p class="card-text cap">${user.location.city}, ${user.location.state}</p>
             </div>
         </div>`;
-
     gallery.insertAdjacentHTML("beforeend", user);
   });
+}
+
+// helps to change users by looping over on the list the modals
+  function changeModal(modalData) {
+  let card = document.querySelectorAll(".card");
+  for (let i = 0; i < card.length; i++) {
+    card[i].addEventListener("click", (e) => {
+      generateModal(modalData[i]);
+    });
+  }
 }
 
 // use ethis function to access the modal
 
 function generateModal(userData) {
+
   let date = new Date(userData.dob.date);
   let month = date.getMonth();
   let day = date.getDay();
   let year = date.getFullYear();
-  const birthday = `${month}-${day}-${year}`;
+  const birthday = `${month}/${day}/${year}`;
 
   modal = `<div class="modal-container">
 <div class="modal">
@@ -63,14 +72,7 @@ function generateModal(userData) {
     modalContainer.style.display = "none";
     modalContainer.remove();
   });
+
+  
 }
 
-// helps to change users by looping over on the list
-function changeModal(modalData) {
-  let card = document.querySelectorAll(".card");
-  for (let i = 0; i < card.length; i++) {
-    card[i].addEventListener("click", (e) => {
-      generateModal(modalData[i]);
-    });
-  }
-}
